@@ -1,0 +1,14 @@
+{
+	"name": "parcel-react-server-starter",
+	"main": "worker-entry.ts",
+	"compatibility_flags": ["nodejs_compat"],
+	"compatibility_date": "2024-09-19",
+	"assets": {
+		"directory": "./dist/",
+		"binding": "ASSETS",
+		"experimental_serve_directly": false
+	},
+	"observability": {
+		"enabled": true
+	}
+}

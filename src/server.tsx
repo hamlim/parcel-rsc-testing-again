@@ -1,26 +1,40 @@
-import express from 'express';
-import {renderRequest, callAction} from '@parcel/rsc/node';
+import { callAction, renderRequest } from "@parcel/rsc/server";
+import { Hono } from "hono";
 
 // Page components. These must have "use server-entry" so they are treated as code splitting entry points.
-import {Page} from './Page';
+import { Page } from "./Page";
 
-const app = express();
+const app = new Hono();
 
-app.use(express.static('dist'));
+if (process.env.NODE_ENV === "development") {
+	const { serveStatic } = require("@hono/node-server");
+	app.use("/*", serveStatic({ root: "./dist" }));
+}
 
-app.get('/', async (req, res) => {
-  await renderRequest(req, res, <Page />, {component: Page});
+app.get("/", (c) => {
+	console.log("Request?!?!?");
+	return renderRequest(c.req.raw, <Page />, { component: Page });
 });
 
-app.post('/', async (req, res) => {
-  let id = req.get('rsc-action-id');
-  let result = await callAction(req, id);
-  let root: any = <Page />;
-  if (id) {
-    root = {result, root};
-  }
-  await renderRequest(req, res, root, {component: Page});
+app.post("/", async (c) => {
+	const id = c.req.header("rsc-action-id");
+
+	const result = await callAction(c.req.raw, id);
+	let root: any = <Page />;
+	if (id) {
+		root = { result, root };
+	}
+	return renderRequest(c.req.raw, root, { component: Page });
 });
 
-app.listen(3001);
-console.log('Server listening on port 3001');
+export default app.fetch;
+globalThis.app = app;
+
+if (process.env.NODE_ENV === "development") {
+	const { serve } = require("@hono/node-server");
+
+	serve({
+		fetch: app.fetch,
+		port: 3001,
+	});
+}
