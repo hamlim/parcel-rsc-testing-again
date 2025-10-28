@@ -25,7 +25,7 @@
 		"@hono/node-server": "1.13.7",
 		"@parcel/rsc": "canary",
 		"express": "^4.21.2",
-		"hono": "4.9.7",
+		"hono": "4.10.3",
 		"react": "canary",
 		"react-dom": "canary",
 		"wrangler": "^3.105.0"
