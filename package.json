@@ -22,7 +22,7 @@
 		"deploy": "bun build:parcel && bun wrangler:deploy"
 	},
 	"dependencies": {
-		"@hono/node-server": "1.19.10",
+		"@hono/node-server": "1.19.13",
 		"@parcel/rsc": "canary",
 		"express": "^4.21.2",
 		"hono": "4.12.12",
